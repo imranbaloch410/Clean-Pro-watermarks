@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FrameCraft 8K - Free Edition</title>
+    <title>FrameCraft Pro - Professional Image Processing</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
@@ -71,6 +71,32 @@
             from { transform: translateX(100%); }
             to { transform: translateX(0); }
         }
+
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+
+        .quality-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #6366f1;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .quality-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #6366f1;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body>
@@ -78,32 +104,30 @@
         <!-- Header -->
         <header class="h-14 border-b border-gray-800 flex items-center justify-between px-4 bg-gray-900/90 backdrop-blur-md z-30 shrink-0">
             <div class="flex items-center gap-3">
-                <div class="w-7 h-7 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-md flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                     </svg>
                 </div>
-                <h1 class="font-bold text-lg tracking-tight hidden md:block">FrameCraft <span class="text-indigo-400 text-sm font-normal">Free Edition</span></h1>
+                <h1 class="font-bold text-lg tracking-tight hidden md:block">FrameCraft <span class="text-indigo-400 text-sm font-semibold">Pro</span></h1>
             </div>
             
             <div class="flex items-center gap-3">
-                <div id="imageCount" class="text-xs mr-2 hidden sm:block text-gray-400">0 / 200 images</div>
-                
-                <label class="flex items-center gap-2 cursor-pointer mr-2 group" title="Apply enhancement to all images">
-                    <div id="batchEnhanceToggle" class="w-8 h-4 rounded-full p-0.5 transition-colors bg-gray-700 cursor-pointer">
-                        <div id="batchEnhanceKnob" class="w-3 h-3 bg-white rounded-full shadow-md transform transition-transform translate-x-0"></div>
-                    </div>
-                    <span id="batchEnhanceLabel" class="text-xs font-medium text-gray-500 group-hover:text-gray-400">Batch Enhance</span>
-                </label>
+                <div id="imageCount" class="text-xs mr-2 hidden sm:block text-gray-400">0 images loaded</div>
                 
                 <button id="addImagesBtn" class="text-sm font-medium text-white bg-gray-800 hover:bg-gray-700 transition-colors flex items-center gap-2 px-3 py-1.5 rounded-md border border-gray-700">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                     Add Images
                 </button>
                 
-                <button id="downloadAllBtn" class="hidden text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 transition-colors items-center gap-2 px-3 py-1.5 rounded-md shadow-md shadow-indigo-900/20">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    <span>Download All</span>
+                <button id="clearAllBtn" class="hidden text-sm font-medium text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700 transition-colors items-center gap-2 px-3 py-1.5 rounded-md border border-gray-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    Clear All
+                </button>
+                
+                <button id="processAllBtn" class="hidden text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 transition-all items-center gap-2 px-4 py-1.5 rounded-md shadow-lg shadow-indigo-900/30">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <span>Process All</span>
                 </button>
                 
                 <input type="file" id="fileInput" accept="image/*" multiple class="hidden" />
@@ -115,7 +139,7 @@
             <div class="w-24 md:w-64 bg-gray-900 border-r border-gray-800 flex flex-col shrink-0 z-20">
                 <div class="p-3 border-b border-gray-800 flex justify-between items-center">
                     <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Queue</span>
-                    <span id="queueCount" class="text-[10px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">0/200</span>
+                    <span id="queueCount" class="text-[10px] bg-gray-800 text-gray-400 px-1.5 py-0.5 rounded">0</span>
                 </div>
                 <div id="batchList" class="flex-1 overflow-y-auto p-2 space-y-2">
                     <div id="emptyState" class="text-center py-10 text-gray-600 text-sm p-2">
@@ -137,140 +161,124 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                             <p class="text-xl font-light text-gray-600">Drop images here or click Add Images</p>
-                            <p class="text-sm text-gray-700">Supports batch processing up to 200 images</p>
+                            <p class="text-sm text-gray-700">Unlimited batch processing - Process all images with one click</p>
                         </div>
                         <img id="previewImage" class="hidden w-full h-full object-contain" alt="Preview" />
-                        <div id="processingOverlay" class="hidden absolute inset-0 bg-black/50 flex items-center justify-center">
-                            <div class="text-center">
+                        <div id="processingOverlay" class="hidden absolute inset-0 bg-black/70 flex items-center justify-center">
+                            <div class="text-center w-64">
                                 <div class="spinner w-12 h-12 mx-auto mb-4"></div>
-                                <p id="processingText" class="text-indigo-400 font-medium animate-pulse">Processing...</p>
+                                <p id="processingText" class="text-indigo-400 font-medium animate-pulse mb-3">Processing...</p>
+                                <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                                    <div id="progressBar" class="progress-bar bg-gradient-to-r from-indigo-500 to-purple-500 h-full rounded-full" style="width: 0%"></div>
+                                </div>
+                                <p id="progressText" class="text-xs text-gray-500 mt-2">0 / 0</p>
                             </div>
                         </div>
                         <div id="dimensionBadge" class="hidden absolute top-4 right-4 bg-black/70 text-white text-xs px-2 py-1 rounded backdrop-blur-sm border border-white/10 font-mono">
                             7680 x 4320
                         </div>
-                        <div id="enhanceBadge" class="hidden absolute top-4 right-16 bg-gradient-to-r from-amber-500 to-orange-600 text-white text-xs px-2 py-1 rounded shadow-lg font-bold tracking-wide flex items-center gap-1">
-                            ✨ NatGeo
+                        <div id="enhanceBadge" class="hidden absolute top-4 right-20 bg-gradient-to-r from-amber-500 to-orange-600 text-white text-xs px-2 py-1 rounded shadow-lg font-bold tracking-wide flex items-center gap-1">
+                            Enhanced
                         </div>
                     </div>
                 </div>
 
                 <!-- Floating Controls -->
-                <div id="controlsPanel" class="hidden mt-6 z-10 w-full max-w-4xl bg-gray-900/ backdrop-blur p-4 rounded-xl border border-gray-800 shadow-2xl flex flex-col xl:flex-row items-center justify-between gap-4">
-                    <div class="flex flex-col md:flex-row items-center gap-4 w-full xl:w-auto">
-                        <!-- Output Preset Selector -->
-                        <div class="flex bg-gray-800 rounded-lg p-1 shrink-0">
-                            <button id="preset8k" class="px-3 py-1.5 text-xs font-medium rounded-md transition-all bg-gray-700 text-white shadow-sm">
-                                8K Ultra
-                            </button>
-                            <button id="presetYT" class="px-3 py-1.5 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-gray-200">
-                                YT Thumb
+                <div id="controlsPanel" class="hidden mt-6 z-10 w-full max-w-4xl bg-gray-900/95 backdrop-blur p-4 rounded-xl border border-gray-800 shadow-2xl">
+                    <div class="flex flex-col xl:flex-row items-center justify-between gap-4">
+                        <div class="flex flex-col md:flex-row items-center gap-4 w-full xl:w-auto">
+                            <!-- Output Preset Selector -->
+                            <div class="flex bg-gray-800 rounded-lg p-1 shrink-0">
+                                <button id="preset8k" class="px-3 py-1.5 text-xs font-medium rounded-md transition-all bg-gray-700 text-white shadow-sm">
+                                    8K Ultra
+                                </button>
+                                <button id="preset4k" class="px-3 py-1.5 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-gray-200">
+                                    4K
+                                </button>
+                                <button id="presetYT" class="px-3 py-1.5 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-gray-200">
+                                    YT Thumb
+                                </button>
+                                <button id="presetCustom" class="px-3 py-1.5 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-gray-200">
+                                    Custom
+                                </button>
+                            </div>
+
+                            <div class="h-8 w-px bg-gray-700 hidden md:block"></div>
+
+                            <!-- Fit Mode Toggles -->
+                            <div class="flex items-center gap-2 overflow-x-auto max-w-full pb-1 md:pb-0">
+                                <button id="fitBlur" class="fit-btn px-3 py-1.5 text-xs rounded-lg transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-900/50">
+                                    Blur Fill
+                                </button>
+                                <button id="fitBlack" class="fit-btn px-3 py-1.5 text-xs rounded-lg transition-all bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200">
+                                    Black Bars
+                                </button>
+                                <button id="fitCrop" class="fit-btn px-3 py-1.5 text-xs rounded-lg transition-all bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200">
+                                    Crop
+                                </button>
+                            </div>
+
+                            <div class="h-8 w-px bg-gray-700 hidden md:block"></div>
+
+                            <!-- Enhancement Toggle -->
+                            <button id="enhanceBtn" class="px-3 py-1.5 text-xs rounded-lg transition-all whitespace-nowrap flex items-center gap-2 bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                Enhance
                             </button>
                         </div>
 
-                        <div class="h-8 w-px bg-gray-700 hidden md:block"></div>
-
-                        <!-- Fit Mode Toggles -->
-                        <div class="flex items-center gap-2 overflow-x-auto max-w-full pb-1 md:pb-0">
-                            <button id="fitBlur" class="fit-btn px-3 py-1.5 text-xs rounded-lg transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-900/50">
-                                Blur Fill
-                            </button>
-                            <button id="fitBlack" class="fit-btn px-3 py-1.5 text-xs rounded-lg transition-all bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200">
-                                Black Bars
-                            </button>
-                            <button id="fitCrop" class="fit-btn px-3 py-1.5 text-xs rounded-lg transition-all bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200">
-                                Crop
-                            </button>
-                        </div>
-
-                        <div class="h-8 w-px bg-gray-700 hidden md:block"></div>
-
-                        <!-- Enhancement Toggle -->
-                        <button id="enhanceBtn" class="px-3 py-1.5 text-xs rounded-lg transition-all whitespace-nowrap flex items-center gap-2 bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                            NatGeo
+                        <!-- Download Button -->
+                        <button id="downloadCurrentBtn" class="w-full xl:w-auto px-6 py-2 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm flex items-center justify-center gap-2 whitespace-nowrap">
+                            Download Current
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                         </button>
                     </div>
 
-                    <!-- Download Button -->
-                    <button id="downloadCurrentBtn" class="w-full xl:w-auto px-6 py-2 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-200 transition-colors text-sm flex items-center justify-center gap-2 whitespace-nowrap">
-                        Download Current
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    </button>
+                    <!-- Advanced Settings Row -->
+                    <div class="mt-4 pt-4 border-t border-gray-800 flex flex-wrap items-center gap-6">
+                        <!-- Output Format -->
+                        <div class="flex items-center gap-2">
+                            <label class="text-xs text-gray-500 font-medium">Format:</label>
+                            <select id="outputFormat" class="bg-gray-800 text-white text-xs rounded-md px-2 py-1.5 border border-gray-700 focus:border-indigo-500 focus:outline-none">
+                                <option value="jpeg">JPEG</option>
+                                <option value="png">PNG</option>
+                                <option value="webp">WebP</option>
+                            </select>
+                        </div>
+
+                        <!-- Quality Slider -->
+                        <div class="flex items-center gap-2 flex-1 min-w-[200px]">
+                            <label class="text-xs text-gray-500 font-medium">Quality:</label>
+                            <input type="range" id="qualitySlider" min="50" max="100" value="95" class="quality-slider flex-1 h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                            <span id="qualityValue" class="text-xs text-gray-400 w-8">95%</span>
+                        </div>
+
+                        <!-- Custom Dimensions (hidden by default) -->
+                        <div id="customDimensions" class="hidden flex items-center gap-2">
+                            <label class="text-xs text-gray-500 font-medium">Size:</label>
+                            <input type="number" id="customWidth" placeholder="Width" class="bg-gray-800 text-white text-xs rounded-md px-2 py-1.5 border border-gray-700 w-20 focus:border-indigo-500 focus:outline-none">
+                            <span class="text-gray-600">x</span>
+                            <input type="number" id="customHeight" placeholder="Height" class="bg-gray-800 text-white text-xs rounded-md px-2 py-1.5 border border-gray-700 w-20 focus:border-indigo-500 focus:outline-none">
+                        </div>
+
+                        <!-- Apply to All Checkbox -->
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" id="applyToAll" class="w-4 h-4 rounded border-gray-600 bg-gray-800 text-indigo-600 focus:ring-indigo-500 focus:ring-offset-gray-900">
+                            <span class="text-xs text-gray-400 group-hover:text-gray-300">Apply settings to all images</span>
+                        </label>
+                    </div>
                 </div>
             </main>
-
-            <!-- Right Panel: Metadata Generator -->
-            <div class="hidden lg:flex w-80 border-l border-gray-800 bg-gray-900 z-20 shadow-2xl shrink-0 flex-col">
-                <div class="p-6 border-b border-gray-800">
-                    <h2 class="text-xl font-bold text-white mb-1 flex items-center gap-2">
-                        <span class="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Smart</span>
-                        <span>Metadata</span>
-                    </h2>
-                    <p class="text-sm text-gray-400">Generate titles, descriptions & hashtags</p>
-                </div>
-                
-                <div id="metadataPanel" class="flex-1 overflow-y-auto p-6">
-                    <div id="metadataPlaceholder" class="h-full flex flex-col items-center justify-center text-gray-500 text-center">
-                        <svg class="w-12 h-12 mb-4 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        <p>Process an image to generate metadata.</p>
-                    </div>
-                    
-                    <div id="metadataContent" class="hidden space-y-6 animate-fade-in">
-                        <button id="generateMetadataBtn" class="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium rounded-lg shadow-lg transform transition hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                            Generate Metadata
-                        </button>
-                        
-                        <div id="metadataResults" class="hidden space-y-6">
-                            <!-- Title -->
-                            <div class="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
-                                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2 font-semibold">Video Title</label>
-                                <div id="generatedTitle" class="text-white font-medium text-lg leading-snug select-all cursor-text"></div>
-                                <button class="copy-btn mt-3 text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1" data-target="generatedTitle">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                    Copy
-                                </button>
-                            </div>
-
-                            <!-- Description -->
-                            <div class="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
-                                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2 font-semibold">Description</label>
-                                <div id="generatedDescription" class="text-gray-200 text-sm leading-relaxed whitespace-pre-wrap select-all cursor-text"></div>
-                                <button class="copy-btn mt-3 text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1" data-target="generatedDescription">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                    Copy
-                                </button>
-                            </div>
-
-                            <!-- Hashtags -->
-                            <div class="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
-                                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2 font-semibold">Hashtags</label>
-                                <div id="generatedHashtags" class="flex flex-wrap gap-2"></div>
-                                <button id="copyHashtagsBtn" class="mt-3 text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                                    Copy All
-                                </button>
-                            </div>
-
-                            <button id="regenerateBtn" class="w-full py-2 text-xs text-gray-500 hover:text-white transition-colors">
-                                Regenerate
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
     <script>
         // ============ STATE ============
-        const MAX_BATCH_SIZE = 200;
-        const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB limit
-        
         const PRESETS = {
             ULTRA_8K: { width: 7680, height: 4320, label: '8K Ultra' },
-            YT_THUMBNAIL: { width: 1280, height: 720, label: 'YT Thumbnail' }
+            UHD_4K: { width: 3840, height: 2160, label: '4K UHD' },
+            YT_THUMBNAIL: { width: 1280, height: 720, label: 'YT Thumbnail' },
+            CUSTOM: { width: 1920, height: 1080, label: 'Custom' }
         };
         
         const FIT_MODES = {
@@ -287,18 +295,21 @@
             fitMode: FIT_MODES.CONTAIN_BLUR,
             outputPreset: 'ULTRA_8K',
             enhanceQuality: false,
-            batchEnhance: false,
             isProcessing: false,
             isZipping: false,
-            currentHashtags: [],
-            processingCache: new Map() // Cache for processed images
+            outputFormat: 'jpeg',
+            quality: 0.95,
+            customWidth: 1920,
+            customHeight: 1080,
+            processingCache: new Map()
         };
 
         // ============ DOM ELEMENTS ============
         const elements = {
             fileInput: document.getElementById('fileInput'),
             addImagesBtn: document.getElementById('addImagesBtn'),
-            downloadAllBtn: document.getElementById('downloadAllBtn'),
+            clearAllBtn: document.getElementById('clearAllBtn'),
+            processAllBtn: document.getElementById('processAllBtn'),
             batchList: document.getElementById('batchList'),
             emptyState: document.getElementById('emptyState'),
             queueCount: document.getElementById('queueCount'),
@@ -308,29 +319,28 @@
             previewImage: document.getElementById('previewImage'),
             processingOverlay: document.getElementById('processingOverlay'),
             processingText: document.getElementById('processingText'),
+            progressBar: document.getElementById('progressBar'),
+            progressText: document.getElementById('progressText'),
             dimensionBadge: document.getElementById('dimensionBadge'),
             enhanceBadge: document.getElementById('enhanceBadge'),
             controlsPanel: document.getElementById('controlsPanel'),
             dropZone: document.getElementById('dropZone'),
             preset8k: document.getElementById('preset8k'),
+            preset4k: document.getElementById('preset4k'),
             presetYT: document.getElementById('presetYT'),
+            presetCustom: document.getElementById('presetCustom'),
             fitBlur: document.getElementById('fitBlur'),
             fitBlack: document.getElementById('fitBlack'),
             fitCrop: document.getElementById('fitCrop'),
             enhanceBtn: document.getElementById('enhanceBtn'),
             downloadCurrentBtn: document.getElementById('downloadCurrentBtn'),
-            batchEnhanceToggle: document.getElementById('batchEnhanceToggle'),
-            batchEnhanceKnob: document.getElementById('batchEnhanceKnob'),
-            batchEnhanceLabel: document.getElementById('batchEnhanceLabel'),
-            metadataPlaceholder: document.getElementById('metadataPlaceholder'),
-            metadataContent: document.getElementById('metadataContent'),
-            metadataResults: document.getElementById('metadataResults'),
-            generateMetadataBtn: document.getElementById('generateMetadataBtn'),
-            generatedTitle: document.getElementById('generatedTitle'),
-            generatedDescription: document.getElementById('generatedDescription'),
-            generatedHashtags: document.getElementById('generatedHashtags'),
-            copyHashtagsBtn: document.getElementById('copyHashtagsBtn'),
-            regenerateBtn: document.getElementById('regenerateBtn')
+            outputFormat: document.getElementById('outputFormat'),
+            qualitySlider: document.getElementById('qualitySlider'),
+            qualityValue: document.getElementById('qualityValue'),
+            customDimensions: document.getElementById('customDimensions'),
+            customWidth: document.getElementById('customWidth'),
+            customHeight: document.getElementById('customHeight'),
+            applyToAll: document.getElementById('applyToAll')
         };
 
         // ============ NOTIFICATION SYSTEM ============
@@ -338,13 +348,15 @@
             const toast = document.createElement('div');
             toast.className = `toast fixed top-4 right-4 z-50 px-4 py-2 rounded-lg text-sm font-medium text-white ${
                 type === 'error' ? 'bg-red-600' : 
-                type === 'success' ? 'bg-green-600' : 'bg-indigo-600'
+                type === 'success' ? 'bg-green-600' : 
+                type === 'warning' ? 'bg-amber-600' : 'bg-indigo-600'
             }`;
             toast.textContent = message;
             document.body.appendChild(toast);
             
             setTimeout(() => {
                 toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
                 setTimeout(() => document.body.removeChild(toast), 300);
             }, 3000);
         }
@@ -360,9 +372,17 @@
             });
         }
 
-        // Unified canvas drawing logic - eliminates code duplication
-        function drawToCanvas(ctx, source, fitMode, preset, enhance) {
-            const { width: targetW, height: targetH } = PRESETS[preset];
+        function getOutputDimensions() {
+            if (state.outputPreset === 'CUSTOM') {
+                return {
+                    width: state.customWidth || 1920,
+                    height: state.customHeight || 1080
+                };
+            }
+            return PRESETS[state.outputPreset];
+        }
+
+        function drawToCanvas(ctx, source, fitMode, targetW, targetH, enhance) {
             const srcW = source.width;
             const srcH = source.height;
             const targetRatio = targetW / targetH;
@@ -396,7 +416,7 @@
                 
                 if (fitMode === FIT_MODES.CONTAIN_BLUR) {
                     ctx.save();
-                    const blurRadius = preset === 'ULTRA_8K' ? 80 : 15;
+                    const blurRadius = Math.max(40, Math.min(targetW, targetH) / 50);
                     ctx.filter = `blur(${blurRadius}px) brightness(0.7)`;
                     
                     const bgScale = Math.max(targetW / srcW, targetH / srcH);
@@ -433,8 +453,10 @@
             return { drawW, drawH, offsetX, offsetY };
         }
 
-        function processImage(source, fitMode, preset, enhance) {
-            const cacheKey = `${fitMode}-${preset}-${enhance}-${source.width}-${source.height}`;
+        function processImage(source, fitMode, enhance) {
+            const { width: targetW, height: targetH } = getOutputDimensions();
+            const cacheKey = `${fitMode}-${targetW}-${targetH}-${enhance}-${source.width}-${source.height}`;
+            
             if (state.processingCache.has(cacheKey)) {
                 return state.processingCache.get(cacheKey);
             }
@@ -442,7 +464,6 @@
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d', { alpha: false });
             
-            const { width: targetW, height: targetH } = PRESETS[preset];
             canvas.width = targetW;
             canvas.height = targetH;
             
@@ -451,12 +472,13 @@
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
             
-            drawToCanvas(ctx, source, fitMode, preset, enhance);
+            drawToCanvas(ctx, source, fitMode, targetW, targetH, enhance);
             
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+            const mimeType = state.outputFormat === 'png' ? 'image/png' : 
+                            state.outputFormat === 'webp' ? 'image/webp' : 'image/jpeg';
+            const dataUrl = canvas.toDataURL(mimeType, state.quality);
             state.processingCache.set(cacheKey, dataUrl);
             
-            // Prevent cache from growing too large
             if (state.processingCache.size > 50) {
                 const firstKey = state.processingCache.keys().next().value;
                 state.processingCache.delete(firstKey);
@@ -465,12 +487,12 @@
             return dataUrl;
         }
 
-        function processImageToBlob(source, fitMode, preset, enhance) {
+        function processImageToBlob(source, fitMode, enhance) {
             return new Promise((resolve, reject) => {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d', { alpha: false });
                 
-                const { width: targetW, height: targetH } = PRESETS[preset];
+                const { width: targetW, height: targetH } = getOutputDimensions();
                 canvas.width = targetW;
                 canvas.height = targetH;
                 
@@ -479,106 +501,33 @@
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
                 
-                drawToCanvas(ctx, source, fitMode, preset, enhance);
+                drawToCanvas(ctx, source, fitMode, targetW, targetH, enhance);
+                
+                const mimeType = state.outputFormat === 'png' ? 'image/png' : 
+                                state.outputFormat === 'webp' ? 'image/webp' : 'image/jpeg';
                 
                 canvas.toBlob((blob) => {
                     if (blob) resolve(blob);
                     else reject(new Error("Canvas to Blob failed"));
-                }, 'image/jpeg', 0.95);
+                }, mimeType, state.quality);
             });
-        }
-
-        // ============ METADATA GENERATION (Local - No API) ============
-        const TITLE_TEMPLATES = [
-            "🔥 {adjective} {subject} You Won't Believe!",
-            "😱 The Most {adjective} {subject} Ever Captured",
-            "✨ Stunning {subject} - {adjective} Moments",
-            "🌟 {adjective} {subject} That Will Blow Your Mind",
-            "📸 Incredible {subject} - Must See {adjective} Shots",
-            "🎬 {adjective} {subject} Compilation - Best of 2024",
-            "💫 Breathtaking {subject} - {adjective} Photography",
-            "🏆 Top {adjective} {subject} Moments Caught on Camera"
-        ];
-        
-        const ADJECTIVES = [
-            "Amazing", "Stunning", "Incredible", "Breathtaking", "Epic",
-            "Mesmerizing", "Spectacular", "Magnificent", "Extraordinary", "Phenomenal",
-            "Captivating", "Awe-Inspiring", "Remarkable", "Sensational", "Majestic"
-        ];
-        
-        const SUBJECTS = [
-            "Nature", "Wildlife", "Landscapes", "Moments", "Views",
-            "Scenery", "Photography", "Captures", "Shots", "Visuals",
-            "Images", "Pictures", "Frames", "Compositions", "Art"
-        ];
-        
-        const DESCRIPTION_TEMPLATES = [
-            "Discover the beauty of this {adjective} capture that showcases the incredible world around us. This stunning visual will leave you speechless.\n\nDon't forget to like, subscribe, and hit the bell for more amazing content!",
-            "Experience the magic of this {adjective} moment frozen in time. Every detail tells a story of nature's incredible artistry.\n\n👉 Subscribe for daily inspiration and stunning visuals!",
-            "Witness the extraordinary beauty captured in this {adjective} image. From composition to colors, every element is perfectly balanced.\n\n🔔 Turn on notifications to never miss our latest uploads!"
-        ];
-        
-        const HASHTAG_POOLS = [
-            ["photography", "photooftheday", "picoftheday", "instagood", "beautiful"],
-            ["nature", "naturephotography", "landscape", "wildlife", "earthpix"],
-            ["travel", "wanderlust", "adventure", "explore", "travelgram"],
-            ["art", "artistic", "creative", "visualart", "composition"],
-            ["stunning", "amazing", "incredible", "breathtaking", "epic"],
-            ["viral", "trending", "fyp", "foryou", "discover"],
-            ["youtube", "youtuber", "subscribe", "video", "content"],
-            ["4k", "8k", "hdr", "highquality", "professional"]
-        ];
-
-        let metadataCache = new Map();
-
-        function generateMetadata() {
-            const adjective = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
-            const subject = SUBJECTS[Math.floor(Math.random() * SUBJECTS.length)];
-            
-            const titleTemplate = TITLE_TEMPLATES[Math.floor(Math.random() * TITLE_TEMPLATES.length)];
-            const title = titleTemplate.replace('{adjective}', adjective).replace('{subject}', subject);
-            
-            const descTemplate = DESCRIPTION_TEMPLATES[Math.floor(Math.random() * DESCRIPTION_TEMPLATES.length)];
-            const description = descTemplate.replace('{adjective}', adjective.toLowerCase());
-            
-            const hashtags = [];
-            HASHTAG_POOLS.forEach(pool => {
-                const shuffled = [...pool].sort(() => Math.random() - 0.5);
-                hashtags.push(...shuffled.slice(0, 2));
-            });
-            
-            const finalHashtags = hashtags.sort(() => Math.random() - 0.5).slice(0, 15);
-            
-            const metadata = { title, description, hashtags: finalHashtags };
-            
-            // Cache management
-            const cacheKey = `${adjective}-${subject}`;
-            metadataCache.set(cacheKey, metadata);
-            if (metadataCache.size > 50) {
-                const firstKey = metadataCache.keys().next().value;
-                metadataCache.delete(firstKey);
-            }
-            
-            return metadata;
         }
 
         // ============ UI UPDATES ============
         function updateUI() {
-            elements.queueCount.textContent = `${state.batchItems.length}/${MAX_BATCH_SIZE}`;
-            elements.imageCount.textContent = `${state.batchItems.length} / ${MAX_BATCH_SIZE} images`;
-            
-            if (state.batchItems.length >= MAX_BATCH_SIZE) {
-                elements.imageCount.className = 'text-xs mr-2 hidden sm:block text-amber-400 font-semibold';
-            } else {
-                elements.imageCount.className = 'text-xs mr-2 hidden sm:block text-gray-400';
-            }
+            elements.queueCount.textContent = state.batchItems.length;
+            elements.imageCount.textContent = `${state.batchItems.length} image${state.batchItems.length !== 1 ? 's' : ''} loaded`;
             
             if (state.batchItems.length > 0) {
-                elements.downloadAllBtn.classList.remove('hidden');
-                elements.downloadAllBtn.classList.add('flex');
+                elements.processAllBtn.classList.remove('hidden');
+                elements.processAllBtn.classList.add('flex');
+                elements.clearAllBtn.classList.remove('hidden');
+                elements.clearAllBtn.classList.add('flex');
             } else {
-                elements.downloadAllBtn.classList.add('hidden');
-                elements.downloadAllBtn.classList.remove('flex');
+                elements.processAllBtn.classList.add('hidden');
+                elements.processAllBtn.classList.remove('flex');
+                elements.clearAllBtn.classList.add('hidden');
+                elements.clearAllBtn.classList.remove('flex');
             }
             
             renderBatchList();
@@ -586,21 +535,33 @@
             
             if (state.selectedId) {
                 elements.controlsPanel.classList.remove('hidden');
-                elements.metadataPlaceholder.classList.add('hidden');
-                elements.metadataContent.classList.remove('hidden');
             } else {
                 elements.controlsPanel.classList.add('hidden');
-                elements.metadataPlaceholder.classList.remove('hidden');
-                elements.metadataContent.classList.add('hidden');
             }
             
             // Update preset buttons
-            if (state.outputPreset === 'ULTRA_8K') {
-                elements.preset8k.className = 'px-3 py-1.5 text-xs font-medium rounded-md transition-all bg-gray-700 text-white shadow-sm';
-                elements.presetYT.className = 'px-3 py-1.5 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-gray-200';
+            [elements.preset8k, elements.preset4k, elements.presetYT, elements.presetCustom].forEach(btn => {
+                btn.className = 'px-3 py-1.5 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-gray-200';
+            });
+            
+            const activePresetBtn = {
+                'ULTRA_8K': elements.preset8k,
+                'UHD_4K': elements.preset4k,
+                'YT_THUMBNAIL': elements.presetYT,
+                'CUSTOM': elements.presetCustom
+            }[state.outputPreset];
+            
+            if (activePresetBtn) {
+                activePresetBtn.className = 'px-3 py-1.5 text-xs font-medium rounded-md transition-all bg-gray-700 text-white shadow-sm';
+            }
+            
+            // Show/hide custom dimensions
+            if (state.outputPreset === 'CUSTOM') {
+                elements.customDimensions.classList.remove('hidden');
+                elements.customDimensions.classList.add('flex');
             } else {
-                elements.presetYT.className = 'px-3 py-1.5 text-xs font-medium rounded-md transition-all bg-red-600/90 text-white shadow-sm';
-                elements.preset8k.className = 'px-3 py-1.5 text-xs font-medium rounded-md transition-all text-gray-400 hover:text-gray-200';
+                elements.customDimensions.classList.add('hidden');
+                elements.customDimensions.classList.remove('flex');
             }
             
             // Update fit mode buttons
@@ -618,23 +579,12 @@
             
             // Update enhance button
             if (state.enhanceQuality) {
-                elements.enhanceBtn.className = '-3 py-1.5 text-xs rounded-lg transition-all whitespace-nowrap flex items-center gap-2 bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg shadow-orange-900/50 ring-1 ring-orange-400/50';
+                elements.enhanceBtn.className = 'px-3 py-1.5 text-xs rounded-lg transition-all whitespace-nowrap flex items-center gap-2 bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg shadow-orange-900/50 ring-1 ring-orange-400/50';
             } else {
                 elements.enhanceBtn.className = 'px-3 py-1.5 text-xs rounded-lg transition-all whitespace-nowrap flex items-center gap-2 bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200';
             }
             
-            // Update batch enhance toggle
-            if (state.batchEnhance) {
-                elements.batchEnhanceToggle.className = 'w-8 h-4 rounded-full p-0.5 transition-colors bg-indigo-500 cursor-pointer';
-                elements.batchEnhanceKnob.className = 'w-3 h-3 bg-white rounded-full shadow-md transform transition-transform translate-x-4';
-                elements.batchEnhanceLabel.className = 'text-xs font-medium text-indigo-400';
-            } else {
-                elements.batchEnhanceToggle.className = 'w-8 h-4 rounded-full p-0.5 transition-colors bg-gray-700 cursor-pointer';
-                elements.batchEnhanceKnob.className = 'w-3 h-3 bg-white rounded-full shadow-md transform transition-transform translate-x-0';
-                elements.batchEnhanceLabel.className = 'text-xs font-medium text-gray-500 group-hover:text-gray-400';
-            }
-            
-            const { width, height } = PRESETS[state.outputPreset];
+            const { width, height } = getOutputDimensions();
             elements.dimensionBadge.textContent = `${width} x ${height}`;
         }
 
@@ -653,6 +603,7 @@
                     <div class="w-16 h-9 bg-gray-950 rounded overflow-hidden shrink-0 relative">
                         <img src="${item.previewUrl}" alt="thumb" class="w-full h-full object-cover" loading="lazy" />
                         <div class="absolute top-0 right-0 bg-black/50 text-[8px] text-white px-1">${idx + 1}</div>
+                        ${item.processed ? '<div class="absolute bottom-0 right-0 bg-green-500 text-[8px] text-white px-1">✓</div>' : ''}
                     </div>
                     <div class="flex-1 min-w-0 hidden md:block">
                         <p class="text-sm text-gray-200 truncate">${item.file.name}</p>
@@ -699,29 +650,19 @@
                 elements.enhanceBadge.classList.add('hidden');
             }
             
-            elements.processingOverlay.classList.remove('hidden');
-            elements.processingText.textContent = 'Processing...';
-            
             try {
-                const dataUrl = processImage(state.sourceImage, state.fitMode, state.outputPreset, state.enhanceQuality);
+                const dataUrl = processImage(state.sourceImage, state.fitMode, state.enhanceQuality);
                 state.processedDataUrl = dataUrl;
                 elements.previewImage.src = dataUrl;
             } catch (e) {
                 console.error('Processing failed:', e);
                 showToast('Image processing failed', 'error');
             }
-            
-            elements.processingOverlay.classList.add('hidden');
         }
 
         // ============ ACTIONS ============
         function validateFile(file) {
             if (!file.type.startsWith('image/')) {
-                showToast(`${file.name} is not an image`, 'error');
-                return false;
-            }
-            if (file.size > MAX_FILE_SIZE) {
-                showToast(`${file.name} exceeds 50MB limit`, 'error');
                 return false;
             }
             return true;
@@ -729,25 +670,18 @@
 
         async function addFiles(files) {
             const filesArray = Array.from(files).filter(validateFile);
-            const remainingSlots = MAX_BATCH_SIZE - state.batchItems.length;
             
-            if (remainingSlots <= 0) {
-                showToast(`Maximum ${MAX_BATCH_SIZE} images allowed`, 'error');
+            if (filesArray.length === 0) {
+                showToast('No valid image files selected', 'error');
                 return;
             }
             
-            if (filesArray.length > remainingSlots) {
-                showToast(`Only ${remainingSlots} slots available`, 'warning');
-            }
-            
-            const itemsToAdd = filesArray.slice(0, remainingSlots);
-            
-            const newItems = itemsToAdd.map(file => ({
+            const newItems = filesArray.map(file => ({
                 id: crypto.randomUUID(),
                 file,
                 previewUrl: URL.createObjectURL(file),
                 processedUrl: null,
-                status: 'pending'
+                processed: false
             }));
             
             state.batchItems = [...state.batchItems, ...newItems];
@@ -775,13 +709,7 @@
                 }
             }
             
-            // Clear caches when switching images
             state.processingCache.clear();
-            metadataCache.clear();
-            
-            elements.metadataResults.classList.add('hidden');
-            elements.generateMetadataBtn.classList.remove('hidden');
-            
             updateUI();
             await updatePreview();
         }
@@ -789,7 +717,7 @@
         function removeItem(id) {
             const item = state.batchItems.find(i => i.id === id);
             if (item) {
-                URL.revokeObjectURL(item.previewUrl); // FIX: Release memory
+                URL.revokeObjectURL(item.previewUrl);
             }
             
             state.batchItems = state.batchItems.filter(item => item.id !== id);
@@ -802,12 +730,22 @@
                     state.sourceImage = null;
                     state.processedDataUrl = null;
                     state.processingCache.clear();
-                    metadataCache.clear();
                 }
             }
             
             updateUI();
             showToast('Image removed', 'info');
+        }
+
+        function clearAll() {
+            state.batchItems.forEach(item => URL.revokeObjectURL(item.previewUrl));
+            state.batchItems = [];
+            state.selectedId = null;
+            state.sourceImage = null;
+            state.processedDataUrl = null;
+            state.processingCache.clear();
+            updateUI();
+            showToast('All images cleared', 'info');
         }
 
         function downloadCurrent() {
@@ -819,13 +757,15 @@
             const link = document.createElement('a');
             link.href = state.processedDataUrl;
             
-            let suffix = '';
-            if (state.enhanceQuality) suffix += '-natgeo';
-            if (state.outputPreset === 'ULTRA_8K') suffix += '-8k.jpg';
-            else suffix += '-thumbnail.jpg';
+            const { width, height } = getOutputDimensions();
+            let suffix = `-${width}x${height}`;
+            if (state.enhanceQuality) suffix += '-enhanced';
+            
+            const ext = state.outputFormat === 'png' ? '.png' : 
+                       state.outputFormat === 'webp' ? '.webp' : '.jpg';
             
             const name = item.file.name.replace(/\.[^/.]+$/, "");
-            link.download = `${name}${suffix}`;
+            link.download = `${name}${suffix}${ext}`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -833,15 +773,18 @@
             showToast('Download started', 'success');
         }
 
-        async function downloadAll() {
+        async function processAll() {
             if (state.batchItems.length === 0 || state.isZipping) return;
             
             state.isZipping = true;
-            const btn = elements.downloadAllBtn;
+            const btn = elements.processAllBtn;
             const originalContent = btn.innerHTML;
             
+            elements.processingOverlay.classList.remove('hidden');
+            
             const zip = new JSZip();
-            const folderName = state.outputPreset === 'ULTRA_8K' ? "framecraft-8k" : "framecraft-thumbnails";
+            const { width, height } = getOutputDimensions();
+            const folderName = `framecraft-${width}x${height}`;
             const folder = zip.folder(folderName);
             
             let successCount = 0;
@@ -852,26 +795,31 @@
                     const item = state.batchItems[i];
                     const progress = Math.round(((i + 1) / state.batchItems.length) * 100);
                     
+                    elements.processingText.textContent = `Processing image ${i + 1} of ${state.batchItems.length}`;
+                    elements.progressBar.style.width = `${progress}%`;
+                    elements.progressText.textContent = `${i + 1} / ${state.batchItems.length}`;
+                    
                     btn.innerHTML = `
                         <div class="spinner w-4 h-4 border-2"></div>
-                        <span class="hidden sm:inline">Processing ${i + 1}/${state.batchItems.length}</span>
-                        <span class="sm:hidden">${progress}%</span>
+                        <span>${progress}%</span>
                     `;
                     
                     await new Promise(resolve => setTimeout(resolve, 10));
                     
                     try {
                         const img = await loadImage(item.previewUrl);
-                        const enhance = state.batchEnhance || state.enhanceQuality;
-                        const blob = await processImageToBlob(img, state.fitMode, state.outputPreset, enhance);
+                        const blob = await processImageToBlob(img, state.fitMode, state.enhanceQuality);
                         
-                        let suffix = '';
-                        if (enhance) suffix += '-natgeo';
-                        if (state.outputPreset === 'ULTRA_8K') suffix += '-8k.jpg';
-                        else suffix += '-thumbnail.jpg';
+                        let suffix = `-${width}x${height}`;
+                        if (state.enhanceQuality) suffix += '-enhanced';
                         
-                        const fileName = item.file.name.replace(/\.[^/.]+$/, "") + suffix;
+                        const ext = state.outputFormat === 'png' ? '.png' : 
+                                   state.outputFormat === 'webp' ? '.webp' : '.jpg';
+                        
+                        const fileName = item.file.name.replace(/\.[^/.]+$/, "") + suffix + ext;
                         folder.file(fileName, blob);
+                        
+                        item.processed = true;
                         successCount++;
                     } catch (err) {
                         console.error(`Failed: ${item.file.name}`, err);
@@ -883,12 +831,14 @@
                     showToast(`${failCount} images failed to process`, 'warning');
                 }
                 
-                btn.innerHTML = `
-                    <div class="spinner w-4 h-4 border-2"></div>
-                    <span>Generating ZIP...</span>
-                `;
+                elements.processingText.textContent = 'Generating ZIP file...';
+                elements.progressBar.style.width = '100%';
                 
-                const content = await zip.generateAsync({ type: "blob" });
+                const content = await zip.generateAsync({ 
+                    type: "blob",
+                    compression: "DEFLATE",
+                    compressionOptions: { level: 6 }
+                });
                 
                 const url = URL.createObjectURL(content);
                 const link = document.createElement('a');
@@ -899,40 +849,18 @@
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
                 
-                showToast(`ZIP generated with ${successCount} images`, 'success');
+                showToast(`Successfully processed ${successCount} images`, 'success');
                 
             } catch (err) {
                 console.error("Batch processing failed", err);
-                showToast("Failed to process batch. Try fewer images.", 'error');
+                showToast("Failed to process batch", 'error');
             }
             
             state.isZipping = false;
             btn.innerHTML = originalContent;
-        }
-
-        function handleGenerateMetadata() {
-            const metadata = generateMetadata();
-            
-            elements.generatedTitle.textContent = metadata.title;
-            elements.generatedDescription.textContent = metadata.description;
-            
-            state.currentHashtags = metadata.hashtags;
-            elements.generatedHashtags.innerHTML = metadata.hashtags.map(tag => `
-                <span class="px-2 py-1 bg-indigo-900/50 text-indigo-200 text-xs rounded-full border border-indigo-800/50">
-                    #${tag}
-                </span>
-            `).join('');
-            
-            elements.generateMetadataBtn.classList.add('hidden');
-            elements.metadataResults.classList.remove('hidden');
-        }
-
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('Copied to clipboard', 'success');
-            }).catch(() => {
-                showToast('Copy failed', 'error');
-            });
+            elements.processingOverlay.classList.add('hidden');
+            elements.progressBar.style.width = '0%';
+            updateUI();
         }
 
         // ============ EVENT LISTENERS ============
@@ -945,64 +873,94 @@
             }
         });
         
-        elements.downloadAllBtn.addEventListener('click', downloadAll);
+        elements.clearAllBtn.addEventListener('click', clearAll);
+        elements.processAllBtn.addEventListener('click', processAll);
         elements.downloadCurrentBtn.addEventListener('click', downloadCurrent);
         
         elements.preset8k.addEventListener('click', () => {
             state.outputPreset = 'ULTRA_8K';
+            state.processingCache.clear();
+            updateUI();
+            updatePreview();
+        });
+        
+        elements.preset4k.addEventListener('click', () => {
+            state.outputPreset = 'UHD_4K';
+            state.processingCache.clear();
             updateUI();
             updatePreview();
         });
         
         elements.presetYT.addEventListener('click', () => {
             state.outputPreset = 'YT_THUMBNAIL';
+            state.processingCache.clear();
             updateUI();
             updatePreview();
         });
         
+        elements.presetCustom.addEventListener('click', () => {
+            state.outputPreset = 'CUSTOM';
+            state.processingCache.clear();
+            updateUI();
+            updatePreview();
+        });
+        
+        elements.customWidth.addEventListener('change', (e) => {
+            state.customWidth = parseInt(e.target.value) || 1920;
+            state.processingCache.clear();
+            updatePreview();
+            updateUI();
+        });
+        
+        elements.customHeight.addEventListener('change', (e) => {
+            state.customHeight = parseInt(e.target.value) || 1080;
+            state.processingCache.clear();
+            updatePreview();
+            updateUI();
+        });
+        
         elements.fitBlur.addEventListener('click', () => {
             state.fitMode = FIT_MODES.CONTAIN_BLUR;
+            state.processingCache.clear();
             updateUI();
             updatePreview();
         });
         
         elements.fitBlack.addEventListener('click', () => {
             state.fitMode = FIT_MODES.CONTAIN_BLACK;
+            state.processingCache.clear();
             updateUI();
             updatePreview();
         });
         
         elements.fitCrop.addEventListener('click', () => {
             state.fitMode = FIT_MODES.COVER;
+            state.processingCache.clear();
             updateUI();
             updatePreview();
         });
         
         elements.enhanceBtn.addEventListener('click', () => {
             state.enhanceQuality = !state.enhanceQuality;
+            state.processingCache.clear();
             updateUI();
             updatePreview();
         });
         
-        elements.batchEnhanceToggle.addEventListener('click', () => {
-            state.batchEnhance = !state.batchEnhance;
-            updateUI();
+        elements.outputFormat.addEventListener('change', (e) => {
+            state.outputFormat = e.target.value;
+            state.processingCache.clear();
+            updatePreview();
         });
         
-        elements.generateMetadataBtn.addEventListener('click', handleGenerateMetadata);
-        elements.regenerateBtn.addEventListener('click', handleGenerateMetadata);
-        
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('copy-btn')) {
-                const targetId = e.target.dataset.target;
-                const text = document.getElementById(targetId).textContent;
-                copyText(text);
-            }
+        elements.qualitySlider.addEventListener('input', (e) => {
+            state.quality = parseInt(e.target.value) / 100;
+            elements.qualityValue.textContent = `${e.target.value}%`;
         });
         
-        elements.copyHashtagsBtn.addEventListener('click', () => {
-            const hashtagsText = state.currentHashtags.map(t => `#${t}`).join(' ');
-            copyText(hashtagsText);
+        elements.qualitySlider.addEventListener('change', () => {
+            state.processingCache.clear();
+            updatePreview();
         });
         
         // Drag and Drop
@@ -1037,12 +995,10 @@
         window.addEventListener('beforeunload', () => {
             state.batchItems.forEach(item => URL.revokeObjectURL(item.previewUrl));
             state.processingCache.clear();
-            metadataCache.clear();
         });
         
         // Initial UI update
         updateUI();
     </script>
 </body>
-
 </html>
